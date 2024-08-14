@@ -39,5 +39,3 @@ This project focuses on advanced API usage, providing hands-on experience with v
 - [Requests Documentation](https://docs.python-requests.org/en/latest/)
 - [REST API Tutorial](https://restfulapi.net/)
 
-## Author
-- kedir Jabir ([@IbnuJabir](https://github.com/IbnuJabir))
