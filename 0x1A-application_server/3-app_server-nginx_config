@@ -1,31 +1,22 @@
 server {
+    listen 80;
+    server_name _;
 
-    listen 80 default_server;
-    listen [::]:80 default_server;
-    root   /var/www/html;
-    index  index.html;
-    add_header X-Served-By 32024-web-01;
-
-    location /hbnb_static {
-        alias /data/web_static/current;
-        index index.html;
+    # Location block to handle requests to /airbnb-dynamic/number_odd_or_even/
+    location /airbnb-dynamic/number_odd_or_even/ {
+        proxy_pass http://127.0.0.1:5001/;
+        proxy_set_header Host $host;
+        proxy_set_header X-Real-IP $remote_addr;
+        proxy_set_header X-Forwarded-For $proxy_add_x_forwarded_for;
+        proxy_set_header X-Forwarded-Proto $scheme;
     }
 
-    location /redirect_me {
-		return 301 https://www.youtube.com/watch?v=QH2-TGUlwu4;
+    # Location block to handle other requests, for example, if another service is running on port 5000
+    location / {
+        proxy_pass http://127.0.0.1:5000/;
+        proxy_set_header Host $host;
+        proxy_set_header X-Real-IP $remote_addr;
+        proxy_set_header X-Forwarded-For $proxy_add_x_forwarded_for;
+        proxy_set_header X-Forwarded-Proto $scheme;
     }
-
-    error_page 404 /404.html;
-    location /404 {
-        root /var/www/html;
-        internal;
-    }
-
-    location = /airbnb-onepage/ {
-        proxy_pass http://127.0.0.1:5000/airbnb-onepage/;
-    }
-    location ~ /airbnb-dynamic/number_odd_or_even/(\d+)$ {
-        proxy_pass http://127.0.0.1:5001/number_odd_or_even/$1;
-    }
-
 }
